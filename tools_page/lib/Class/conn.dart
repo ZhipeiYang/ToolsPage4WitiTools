@@ -47,6 +47,9 @@ class ConnectInfo {
     }
     return false;
   }
+  void printUtil(){
+    print(uuid+' '+nick+' '+user+' '+auth.toString()+' '+key+' '+host+ ' '+port.toString());
+  }
 }
 
 class ConnectInfoUtil{

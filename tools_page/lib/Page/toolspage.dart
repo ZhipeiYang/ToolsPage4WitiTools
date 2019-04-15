@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tools_page/Tips/new_connection.dart';
+import 'package:tools_page/Tips/select_connection.dart';
 class ToolsPage extends StatefulWidget {
   final Widget child;
 
@@ -32,7 +33,7 @@ class _ToolsPageState extends State<ToolsPage> {
           )
         ]
       ),
-      body: NewConnection(),
+      body: SelectConn(),
     );
   }
 }

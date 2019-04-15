@@ -84,7 +84,7 @@ class _NewConnectionState extends State<NewConnection> {
                   color: Colors.blue,
                   textColor: Colors.white,
                   onPressed: () async {
-                    if (_InitConnectInfo()) {
+                    if (_initConnectInfo()) {
                       String databasePath = await getDatabasesPath();
                       String path = join(databasePath, 'connInfo.db');
                       ConnectInfoUtil util = ConnectInfoUtil();
@@ -120,7 +120,7 @@ class _NewConnectionState extends State<NewConnection> {
     );
   }
 
-  bool _InitConnectInfo() {
+  bool _initConnectInfo() {
     ConnectInfo connectInfo = ConnectInfo();
     //生成一个uuid填充
     connectInfo.uuid = Uuid().v4().toString();
