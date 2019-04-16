@@ -4,11 +4,17 @@ import 'package:tools_page/Class/conn.dart';
 import 'package:uuid/uuid.dart';
 import 'package:sqflite/sqflite.dart';
 
-class NewConnection extends StatefulWidget {
-  _NewConnectionState createState() => _NewConnectionState();
+import 'package:flutter/material.dart';
+
+class UpdateConnection extends StatefulWidget {
+  ConnectInfo conn;
+  UpdateConnection({this.conn}):super();
+  @override
+  _UpdateConnectionState createState() => _UpdateConnectionState(conn);
 }
 
-class _NewConnectionState extends State<NewConnection> {
+class _UpdateConnectionState extends State<UpdateConnection> {
+
   TextEditingController _nickController = TextEditingController();
   TextEditingController _userController = TextEditingController();
   TextEditingController _hostController = TextEditingController();
@@ -16,6 +22,18 @@ class _NewConnectionState extends State<NewConnection> {
   TextEditingController _authController = TextEditingController();
   ConnectInfo _connectInfo;
   int _authFlag = 0;
+  String _uuid;
+  _UpdateConnectionState(ConnectInfo conn){
+    print('初始信息:');
+    conn.printUtil();
+    if (conn != null) {
+      _nickController.text = conn.nick;
+      _userController.text = conn.user;
+      _hostController.text = conn.host;
+      _portController.text = conn.port.toString();
+      _uuid=conn.uuid;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,26 +103,36 @@ class _NewConnectionState extends State<NewConnection> {
                       child: Container(
                     margin: EdgeInsets.only(left: 20, right: 20),
                     child: RaisedButton(
-                      color: Colors.blue,
+                      color: Colors.green,
                       textColor: Colors.white,
                       onPressed: () async {
                         if (_initConnectInfo()) {
                           String databasePath = await getDatabasesPath();
                           String path = join(databasePath, 'connInfo.db');
                           ConnectInfoUtil util = ConnectInfoUtil();
-                          util.open(path).then((value) {
-                            util.insert(_connectInfo).then((onValue) {
-                              if (onValue > 0) {
-                                //print('插入成功');
-                                // Scaffold.of(context).showSnackBar(new SnackBar(
-                                //   content: Text('插入成功'),
-                                // ));
-                                print('插入成功');
-                                Navigator.pop(context);
+                          util.open(path).then((value){
+                            util.update(_connectInfo).then((onValue){
+                              if(onValue>0){
+                                print('更新成功');
+                              }else{
+                                print('更新失败');
                               }
+                              Navigator.pop(context);
                             });
-                            //util.close();
                           });
+                          // util.open(path).then((value) {
+                          //   util.insert(_connectInfo).then((onValue) {
+                          //     if (onValue > 0) {
+                          //       //print('插入成功');
+                          //       // Scaffold.of(context).showSnackBar(new SnackBar(
+                          //       //   content: Text('插入成功'),
+                          //       // ));
+                          //       //print('插入成功');
+                          //     }
+                          //   });
+                          //   //util.close();
+                          // });
+                          //print('初始化完成');
                         }
                       },
                       child: Text('确定'),
@@ -128,11 +156,10 @@ class _NewConnectionState extends State<NewConnection> {
           ),
         ));
   }
-
-  bool _initConnectInfo() {
+   bool _initConnectInfo() {
     ConnectInfo connectInfo = ConnectInfo();
     //生成一个uuid填充
-    connectInfo.uuid = Uuid().v4().toString();
+    connectInfo.uuid = _uuid;
     connectInfo.nick = _nickController.text != ""
         ? _nickController.text
         : _hostController.text +":"+ _portController.text;
@@ -142,9 +169,11 @@ class _NewConnectionState extends State<NewConnection> {
     connectInfo.host = _hostController.text;
     connectInfo.port = int.parse(_portController.text);
     if (connectInfo.check()) {
+      connectInfo.printUtil();
       setState(() {
         _connectInfo = connectInfo;
       });
+
       return true;
     }
     return false;

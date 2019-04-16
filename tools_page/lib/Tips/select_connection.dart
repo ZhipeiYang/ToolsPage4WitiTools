@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:tools_page/Class/conn.dart';
 import 'package:sqflite/sqflite.dart';
-
+import 'update_connection.dart';
 class SelectConn extends StatefulWidget {
   @override
   _SelectConnState createState() => _SelectConnState();
@@ -12,6 +12,12 @@ class _SelectConnState extends State<SelectConn> {
   List<Map> _connList;
   bool _connListFlag = false;
   List<ConnectInfo> _connInfoList;
+  @override
+  void initState() {
+    // TODO: implement initState
+    initList();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +80,7 @@ class _SelectConnState extends State<SelectConn> {
         physics: new ClampingScrollPhysics(),
         itemCount: _connInfoList.length,
         itemBuilder: (BuildContext context, int position) {
-          return getItem(position);
+          return getItem(context,position);
         },
       );
     } else {
@@ -84,7 +90,7 @@ class _SelectConnState extends State<SelectConn> {
     }
   }
 
-  getItem(int position) {
+  getItem(BuildContext context,int position) {
     return Card(
       child: Row(children: <Widget>[
         Expanded(
@@ -111,6 +117,9 @@ class _SelectConnState extends State<SelectConn> {
               print(value);
               if (value == 0) {
               } else if (value == 1) {
+                Navigator.push(context,MaterialPageRoute(
+                  builder: (context)=>UpdateConnection(conn:_connInfoList[position]),
+                ));
               } else if (value == 2) {
                 String dataBasePath;
                 String path;
