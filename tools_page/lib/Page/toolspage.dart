@@ -14,27 +14,40 @@ class _ToolsPageState extends State<ToolsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('测速'), actions: <Widget>[
-        PopupMenuButton<String>(
-            onSelected: (String value) {
-              print(value);
-              if (value == '0') {
-                Navigator.push(
-                  context,
-                  new MaterialPageRoute(builder: (context) => NewConnection()),
-                );
-              } else if (value == '1') {
-                Navigator.push(
-                  context,
-                  new MaterialPageRoute(builder: (context) =>SelectConn()),
-                );
-              }
+      appBar: AppBar(
+        title: Text('工具'),
+        actions: <Widget>[
+          Builder(
+            builder: (BuildContext context) {
+              return PopupMenuButton<String>(
+                  onSelected: (String value) {
+                    print(value);
+                    if (value == '0') {
+                      Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => NewConnection()),
+                      ).then((value) {
+                        Scaffold.of(context).showSnackBar(SnackBar(content: Text("$value"),));
+                        //print(value);
+                      });
+                    } else if (value == '1') {
+                      Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => SelectConn()),
+                      );
+                    }
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuItem<String>>[
+                        PopupMenuItem<String>(value: '0', child: Text('新建')),
+                        PopupMenuItem<String>(value: '1', child: Text('选择'))
+                      ]);
             },
-            itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
-                  PopupMenuItem<String>(value: '0', child: Text('新建')),
-                  PopupMenuItem<String>(value: '1', child: Text('选择'))
-                ])
-      ]),
+          )
+        ],
+      ),
       body: Container(),
     );
   }

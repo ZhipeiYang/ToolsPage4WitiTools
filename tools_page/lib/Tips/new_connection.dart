@@ -99,8 +99,10 @@ class _NewConnectionState extends State<NewConnection> {
                                 // Scaffold.of(context).showSnackBar(new SnackBar(
                                 //   content: Text('插入成功'),
                                 // ));
-                                print('插入成功');
-                                Navigator.pop(context);
+                                //print('插入成功');
+                                Navigator.pop(context,'插入成功!');
+                              }else{
+                                Navigator.pop(context,'插入失败!');
                               }
                             });
                             //util.close();
@@ -117,7 +119,7 @@ class _NewConnectionState extends State<NewConnection> {
                           color: Colors.red,
                           textColor: Colors.white,
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.pop(context,'已取消!');
                           },
                           child: Text('取消'),
                         )),

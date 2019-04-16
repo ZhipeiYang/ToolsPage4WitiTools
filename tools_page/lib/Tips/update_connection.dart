@@ -113,11 +113,13 @@ class _UpdateConnectionState extends State<UpdateConnection> {
                           util.open(path).then((value){
                             util.update(_connectInfo).then((onValue){
                               if(onValue>0){
-                                print('更新成功');
+                                //print('更新成功');
+                                Navigator.pop(context,'更新成功!');
                               }else{
-                                print('更新失败');
+                                //print('更新失败');
+                                Navigator.pop(context,'更新失败!');
                               }
-                              Navigator.pop(context);
+                             
                             });
                           });
                           // util.open(path).then((value) {
@@ -145,7 +147,7 @@ class _UpdateConnectionState extends State<UpdateConnection> {
                           color: Colors.red,
                           textColor: Colors.white,
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.pop(context,'已取消!');
                           },
                           child: Text('取消'),
                         )),

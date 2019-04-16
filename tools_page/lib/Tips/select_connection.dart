@@ -119,7 +119,10 @@ class _SelectConnState extends State<SelectConn> {
               } else if (value == 1) {
                 Navigator.push(context,MaterialPageRoute(
                   builder: (context)=>UpdateConnection(conn:_connInfoList[position]),
-                ));
+                )).then((value){
+                  //print(value);
+                  Scaffold.of(context).showSnackBar(SnackBar(content: Text("$value"),));
+                });
               } else if (value == 2) {
                 String dataBasePath;
                 String path;
@@ -130,7 +133,11 @@ class _SelectConnState extends State<SelectConn> {
                   util.open(path).then((value2) {
                     util.delete(_connInfoList[position].uuid).then((onValue) {
                       if (onValue > 0) {
-                        print('delete success');
+                        //print('delete success');
+                        Scaffold.of(context).showSnackBar(SnackBar(content: Text('已删除!'),));
+                        initList();
+                      }else{
+                        Scaffold.of(context).showSnackBar(SnackBar(content: Text('删除失败!'),));
                         initList();
                       }
                     });
@@ -161,7 +168,7 @@ class _SelectConnState extends State<SelectConn> {
                         ],
                   )),
                   PopupMenuItem<int>(
-                      value: 0,
+                      value: 2,
                       child: Row(
                         children: <Widget>[
                           Padding(
