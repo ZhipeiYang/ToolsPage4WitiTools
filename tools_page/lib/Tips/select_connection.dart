@@ -14,7 +14,6 @@ class _SelectConnState extends State<SelectConn> {
   List<ConnectInfo> _connInfoList;
   @override
   void initState() {
-    // TODO: implement initState
     initList();
     super.initState();
   }
@@ -29,16 +28,6 @@ class _SelectConnState extends State<SelectConn> {
         child: Icon(Icons.refresh),
         onPressed: () {
           initList();
-          //print('初始化完成');
-          // if(_connListFlag==false){
-          //   Scaffold.of(context).showSnackBar(SnackBar(
-          //     content: Text('数据库为空'),
-          //   ));
-          // }else{
-          //   Scaffold.of(context).showSnackBar(SnackBar(
-          //     content: Text('刷新成功'),
-          //   ));
-          // }
         },
       ),
     );
@@ -85,7 +74,7 @@ class _SelectConnState extends State<SelectConn> {
       );
     } else {
       return Center(
-        child: Text('请刷新'),
+        child: Text('列表为空'),
       );
     }
   }
@@ -105,7 +94,7 @@ class _SelectConnState extends State<SelectConn> {
                   style: TextStyle(fontSize: 18),
                 ),
                 Text(
-                  _connInfoList[position].host,
+                  _connInfoList[position].host+':'+_connInfoList[position].port.toString(),
                   style: TextStyle(fontSize: 14, color: Colors.grey),
                 ),
               ],
@@ -114,14 +103,17 @@ class _SelectConnState extends State<SelectConn> {
         ),
         PopupMenuButton<int>(
             onSelected: (int value) {
-              print(value);
+              //print(value);
               if (value == 0) {
+                Navigator.pop(context,_connInfoList[position]);
               } else if (value == 1) {
                 Navigator.push(context,MaterialPageRoute(
                   builder: (context)=>UpdateConnection(conn:_connInfoList[position]),
                 )).then((value){
                   //print(value);
-                  Scaffold.of(context).showSnackBar(SnackBar(content: Text("$value"),));
+                  if(value!=null){
+                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("$value"),));
+                  }                  
                 });
               } else if (value == 2) {
                 String dataBasePath;

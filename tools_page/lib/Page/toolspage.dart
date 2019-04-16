@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tools_page/Tips/new_connection.dart';
 import 'package:tools_page/Tips/select_connection.dart';
-
+import 'package:tools_page/Class/conn.dart';
 class ToolsPage extends StatefulWidget {
-  final Widget child;
-
-  ToolsPage({Key key, this.child}) : super(key: key);
-
   _ToolsPageState createState() => _ToolsPageState();
 }
 
 class _ToolsPageState extends State<ToolsPage> {
+  ConnectInfo _connectInfo;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,15 +17,16 @@ class _ToolsPageState extends State<ToolsPage> {
           Builder(
             builder: (BuildContext context) {
               return PopupMenuButton<String>(
-                  onSelected: (String value) {
-                    print(value);
+                  onSelected: (String value) {                   
                     if (value == '0') {
                       Navigator.push(
                         context,
                         new MaterialPageRoute(
                             builder: (context) => NewConnection()),
                       ).then((value) {
-                        Scaffold.of(context).showSnackBar(SnackBar(content: Text("$value"),));
+                        if(value!=null){
+                          Scaffold.of(context).showSnackBar(SnackBar(content: Text("$value"),));
+                        }                        
                         //print(value);
                       });
                     } else if (value == '1') {
@@ -36,7 +34,14 @@ class _ToolsPageState extends State<ToolsPage> {
                         context,
                         new MaterialPageRoute(
                             builder: (context) => SelectConn()),
-                      );
+                      ).then((value){
+                       if(value!=null){
+                          setState(() {
+                         _connectInfo=value;
+                         _connectInfo.printUtil(); 
+                        });
+                       }
+                      });
                     }
                   },
                   itemBuilder: (BuildContext context) =>

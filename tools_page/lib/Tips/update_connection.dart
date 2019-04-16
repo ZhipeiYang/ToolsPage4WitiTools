@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:tools_page/Class/conn.dart';
-import 'package:uuid/uuid.dart';
 import 'package:sqflite/sqflite.dart';
-
-import 'package:flutter/material.dart';
 
 class UpdateConnection extends StatefulWidget {
   ConnectInfo conn;
@@ -24,8 +21,8 @@ class _UpdateConnectionState extends State<UpdateConnection> {
   int _authFlag = 0;
   String _uuid;
   _UpdateConnectionState(ConnectInfo conn){
-    print('初始信息:');
-    conn.printUtil();
+    // print('初始信息:');
+    // conn.printUtil();
     if (conn != null) {
       _nickController.text = conn.nick;
       _userController.text = conn.user;
@@ -121,23 +118,10 @@ class _UpdateConnectionState extends State<UpdateConnection> {
                               }
                              
                             });
-                          });
-                          // util.open(path).then((value) {
-                          //   util.insert(_connectInfo).then((onValue) {
-                          //     if (onValue > 0) {
-                          //       //print('插入成功');
-                          //       // Scaffold.of(context).showSnackBar(new SnackBar(
-                          //       //   content: Text('插入成功'),
-                          //       // ));
-                          //       //print('插入成功');
-                          //     }
-                          //   });
-                          //   //util.close();
-                          // });
-                          //print('初始化完成');
+                          });                        
                         }
                       },
-                      child: Text('确定'),
+                      child: Text('新建'),
                     ),
                   )),
                   Expanded(
@@ -171,7 +155,7 @@ class _UpdateConnectionState extends State<UpdateConnection> {
     connectInfo.host = _hostController.text;
     connectInfo.port = int.parse(_portController.text);
     if (connectInfo.check()) {
-      connectInfo.printUtil();
+      //connectInfo.printUtil();
       setState(() {
         _connectInfo = connectInfo;
       });

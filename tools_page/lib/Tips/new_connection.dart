@@ -109,7 +109,7 @@ class _NewConnectionState extends State<NewConnection> {
                           });
                         }
                       },
-                      child: Text('确定'),
+                      child: Text('插入'),
                     ),
                   )),
                   Expanded(
