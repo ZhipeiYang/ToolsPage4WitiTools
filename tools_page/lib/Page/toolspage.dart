@@ -16,6 +16,7 @@ class _ToolsPageState extends State<ToolsPage> {
   TextEditingController _terminalController = TextEditingController();
   TextEditingController _inputController = TextEditingController();
   FocusNode _focusNode = FocusNode();
+  bool _shellFlag=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,9 +85,13 @@ class _ToolsPageState extends State<ToolsPage> {
           //Divider(height: 1.0),
           TextField(
             focusNode: _focusNode,
-            onSubmitted: (value) {
-              submit(value);
-
+            onSubmitted: (value) async {
+              //submit(value);
+              
+              if(_shellFlag==true){
+                print(await _client.writeToShell(_inputController.text+'\n'));
+              }
+              _inputController.clear();
             },
             onEditingComplete: () =>
                 FocusScope.of(context).requestFocus(_focusNode),
@@ -129,30 +134,38 @@ class _ToolsPageState extends State<ToolsPage> {
           Container(
             margin: EdgeInsets.only(left: 20, right: 20),
             child: RaisedButton(
-              color: Colors.blue,
+              color: _shellFlag==false?Colors.blue:Colors.red,
               textColor: Colors.white,
-              child: Text('连接'),
+              child: Text(_shellFlag==false?'连接':'断开'),
               onPressed: () async {
-                try {
+                if(_shellFlag==false){
+                  try {
                   String result = await _client.connect();
                   if (result == "session_connected") {
                     result = await _client.startShell(
-                        ptyType: "xterm",
+                       // ptyType: "ansi",
                         callback: (dynamic res) {
                           _terminalController.text += res;
+                          print(res+'\n');
                         });
 
                     if (result == "shell_started") {
-                      print(await _client.writeToShell("echo hello > world\n"));
-                      print(await _client.writeToShell("cat world\n"));
-                      // new Future.delayed(
-                      //   const Duration(seconds: 5),
-                      //   () async => await _client.closeShell(),
-                      // );
+                      setState(() {
+                       _shellFlag=true; 
+                       _terminalController.clear();
+                      });
                     }
                   }
                 } on PlatformException catch (e) {
-                  submit('Error: ${e.code}\nError Message: ${e.message}');
+                  submit('Error: ${e.code}\nError Message: ${e.message}\n');
+                }
+                }else{
+                  _client.closeShell();
+                  _terminalController.clear();
+                  _terminalController.text='连接断开';
+                  setState(() {
+                   _shellFlag=false; 
+                  });
                 }
               },
             ),
